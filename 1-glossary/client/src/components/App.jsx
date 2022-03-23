@@ -10,13 +10,8 @@ class App extends React.Component {
     this.state = { entries: [] };
   }
 
-  getEntries() {
-    // TODO: Refactor into a single handleRequest method
-
-    fetch('/glossary', {
-      method: 'GET', // Note to future self: this is the default
-      headers: { 'Content-Type': 'application/json' },
-    })
+  handleFetch(endpoint, options) {
+    fetch(endpoint, options)
       .then((response) => {
         if (!response.ok) {
           // TODO: figure out how to really pass on the error
@@ -35,30 +30,18 @@ class App extends React.Component {
       });
   }
 
-  addNewWord(newEntry) {
-    // TODO: Refactor into a single handleRequest method
+  getEntries() {
+    this.handleFetch('/glossary', {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
-    fetch('/glossary', {
+  addNewWord(newEntry) {
+    this.handleFetch('/glossary', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newEntry),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          // TODO: figure out how to really pass on the error
-          throw response.json();
-        }
-        return response.json();
-      })
-      .then((entries) => {
-        if (entries && entries.length) {
-          this.setState({ entries });
-        }
-      })
-      .catch((err) => {
-        console.log('Problem adding entry to server');
-        console.error(err);
-      });
+    });
   }
 
   componentDidMount() {
