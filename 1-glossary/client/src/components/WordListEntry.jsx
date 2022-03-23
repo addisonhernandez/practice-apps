@@ -1,9 +1,9 @@
 import React from 'react';
 
-const WordListEntry = ({ word, definition }) => (
+const WordListEntry = ({ entry }) => (
   <div className="glossary-entry">
-    <span>{word}: </span>
-    <span>{definition}</span>
+    <span>{entry.word}: </span>
+    <span>{entry.definition}</span>
   </div>
 );
 
