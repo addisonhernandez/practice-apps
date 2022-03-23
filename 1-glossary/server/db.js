@@ -37,6 +37,50 @@ const saveEntry = function (entry) {
   ).exec();
 };
 
+const initialize = function () {
+  return Glossary.bulkWrite([
+    {
+      deleteMany: {
+        filter: {},
+      },
+    },
+    {
+      insertOne: {
+        document: {
+          word: 'Fluff',
+          definition: 'A floofy poofy animal',
+        },
+      },
+    },
+    {
+      insertOne: {
+        document: {
+          word: 'Nugget',
+          definition: 'An animal that acts helpless in a silly way',
+        },
+      },
+    },
+    {
+      insertOne: {
+        document: {
+          word: 'Grumpp',
+          definition: 'A pet in a state of pout',
+        },
+      },
+    },
+    {
+      insertOne: {
+        document: {
+          word: 'Zoomies',
+          definition: 'Pure and unbridled joy',
+        },
+      },
+    },
+  ]).then((res) => {
+    console.log(`Database reset.\n${res.deletedCount} documents deleted.`);
+  });
+};
+
 // 3. Export the models
 // 4. Import the models into any modules that need them
-module.exports = { getGlossaryEntries, saveEntry };
+module.exports = { getGlossaryEntries, saveEntry, initialize };
