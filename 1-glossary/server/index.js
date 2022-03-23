@@ -44,6 +44,17 @@ app.post('/glossary', (req, res) => {
     });
 });
 
+// endpoint to initialize the database
+app.get('/reset', (req, res) => {
+  db.initialize()
+    .then(() => db.getGlossaryEntries())
+    .then(() => res.status(200).redirect('/'))
+    .catch((err) => {
+      console.log('Error while resetting the database');
+      console.error(err);
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
 console.log(`Listening at http://localhost:${PORT}`);
