@@ -1,24 +1,21 @@
-require("dotenv").config();
-const express = require("express");
-const path = require("path");
+require('dotenv').config();
+const express = require('express');
+const path = require('path');
 const db = require('./db');
 
 const app = express();
 
 // Serves up all static and generated assets in ../client/dist.
-app.use(express.static(path.join(__dirname, "../client/dist")));
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // route GET request to root
-app.get('/', (req, res) => {
-  console.log('Serving GET to /');
-  db.find({}).sort({ word: 'asc' }).exec()
-    .then((results) => {
-      console.log(results);
-      return results;
-    })
+app.get('/glossary', (req, res) => {
+  console.log('Serving GET to /glossary');
+
+  db.getGlossaryEntries()
     .then((entries) => res.status(200).send(entries))
     .catch((err) => {
       console.log('Error while reading from the database');
@@ -28,9 +25,25 @@ app.get('/', (req, res) => {
 
 // route POST request to /glossary
 app.post('/glossary', (req, res) => {
-  // TODO:
-  res.status(404).end();
+  console.log('Serving POST to /glossary');
+
+  const newEntry = req.body;
+
+  if (!newEntry || !newEntry.word || !newEntry.definition) {
+    return res.status(400).send({
+      error: 'Malformed request syntax. Word and Definition are required.',
+    });
+  }
+
+  db.saveEntry(newEntry)
+    .then(() => db.getGlossaryEntries())
+    .then((entries) => res.status(201).send(entries))
+    .catch((err) => {
+      console.log('Error while writing to the database');
+      console.error(err);
+    });
 });
 
-app.listen(process.env.PORT);
-console.log(`Listening at http://localhost:${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT);
+console.log(`Listening at http://localhost:${PORT}`);
