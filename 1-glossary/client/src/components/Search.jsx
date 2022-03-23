@@ -11,7 +11,7 @@ class Search extends React.Component {
     this.setState({ filter: event.target.value });
   }
 
-  filter() {
+  search() {
     this.props.onSearch(this.state.filter);
   }
 
@@ -19,7 +19,7 @@ class Search extends React.Component {
     return (
       <div className="search">
         <input value={this.state.filter} onChange={this.onChange.bind(this)} />
-        <button onClick={this.props.onSearch.bind(this)}>Filter Results</button>
+        <button onClick={this.search.bind(this)}>Filter Results</button>
       </div>
     );
   }
