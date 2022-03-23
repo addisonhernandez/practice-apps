@@ -12,17 +12,23 @@ class App extends React.Component {
 
   getEntries() {
     // TODO: Refactor into a single handleRequest method
-    // send a GET request to server
-    // payload: `term`
-    // expect response: glossary entries from DB that match
-    // update state
 
-    fetch('/', {
+    fetch('/glossary', {
       method: 'GET', // Note to future self: this is the default
       headers: { 'Content-Type': 'application/json' },
     })
-      .then((response) => response.json())
-      .then((entries) => this.setState({ entries }))
+      .then((response) => {
+        if (!response.ok) {
+          // TODO: figure out how to really pass on the error
+          throw response.json();
+        }
+        return response.json();
+      })
+      .then((entries) => {
+        if (entries && entries.length) {
+          this.setState({ entries });
+        }
+      })
       .catch((err) => {
         console.log('Problem getting entries from server');
         console.error(err);
@@ -31,18 +37,24 @@ class App extends React.Component {
 
   addNewWord(newEntry) {
     // TODO: Refactor into a single handleRequest method
-    // POST to server
-    // payload: { word, definition }
-    // response: status code? all entries?
-    // update state
 
     fetch('/glossary', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newEntry),
     })
-      .then((response) => response.json())
-      .then((entries) => this.setState({ entries }))
+      .then((response) => {
+        if (!response.ok) {
+          // TODO: figure out how to really pass on the error
+          throw response.json();
+        }
+        return response.json();
+      })
+      .then((entries) => {
+        if (entries && entries.length) {
+          this.setState({ entries });
+        }
+      })
       .catch((err) => {
         console.log('Problem adding entry to server');
         console.error(err);
