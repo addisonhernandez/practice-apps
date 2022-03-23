@@ -10,19 +10,16 @@ class App extends React.Component {
     this.state = { entries: [] };
   }
 
-  filterResults(term = {}) {
+  getEntries() {
     // TODO: Refactor into a single handleRequest method
     // send a GET request to server
     // payload: `term`
     // expect response: glossary entries from DB that match
     // update state
 
-    fetch('/glossary', {
+    fetch('/', {
       method: 'GET', // Note to future self: this is the default
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(term),
+      headers: { 'Content-Type': 'application/json' },
     })
       .then((response) => response.json())
       .then((entries) => this.setState({ entries }))
@@ -32,7 +29,7 @@ class App extends React.Component {
       });
   }
 
-  addNewWord(word, definition) {
+  addNewWord(newEntry) {
     // TODO: Refactor into a single handleRequest method
     // POST to server
     // payload: { word, definition }
@@ -41,10 +38,8 @@ class App extends React.Component {
 
     fetch('/glossary', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ word, definition }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newEntry),
     })
       .then((response) => response.json())
       .then((entries) => this.setState({ entries }))
@@ -55,14 +50,14 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.filterResults();
+    this.getEntries();
   }
 
   render() {
     return (
       <>
         <h1>Glossary</h1>
-        <Search onSearch={this.filterResults.bind(this)} />
+        <Search onSearch={this.getEntries.bind(this)} />
         <NewWordForm onSubmit={this.addNewWord.bind(this)} />
         <WordList entries={this.state.entries} />
       </>
