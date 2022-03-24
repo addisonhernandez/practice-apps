@@ -20,11 +20,13 @@ class NewWordForm extends React.Component {
 
   submit() {
     this.props.onSubmit(this.state);
+    this.setState({ word: '', definition: '' });
   }
 
   render() {
     return (
       <div className="new-word">
+        <h2>Add an entry</h2>
         <input
           value={this.state.word}
           onChange={this.handleWordChange.bind(this)}
@@ -33,9 +35,7 @@ class NewWordForm extends React.Component {
           value={this.state.definition}
           onChange={this.handleDefinitionChange.bind(this)}
         />
-        <button onClick={this.submit.bind(this)}>
-          Add Glossary Entry
-        </button>
+        <button onClick={this.submit.bind(this)}>Add Glossary Entry</button>
       </div>
     );
   }

@@ -15,7 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/glossary', (req, res) => {
   console.log('Serving GET to /glossary');
 
-  db.getGlossaryEntries()
+  const query = req.query.q;
+
+  db.getGlossaryEntries(query)
     .then((entries) => res.status(200).send(entries))
     .catch((err) => {
       console.log('Error while reading from the database');

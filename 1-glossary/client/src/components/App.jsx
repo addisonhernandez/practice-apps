@@ -30,8 +30,12 @@ class App extends React.Component {
       });
   }
 
-  getEntries() {
-    this.handleFetch('/glossary', {
+  getEntries(term) {
+    const endpoint = (term) ?
+      `/glossary?q=${term}` :
+      '/glossary';
+
+    this.handleFetch(endpoint, {
       headers: { 'Content-Type': 'application/json' },
     });
   }

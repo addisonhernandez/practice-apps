@@ -22,8 +22,15 @@ const glossarySchema = new mongoose.Schema({
 
 const Glossary = mongoose.model('Glossary', glossarySchema);
 
-const getGlossaryEntries = function () {
-  return Glossary.find({}).sort({ word: 'asc' }).exec();
+const getGlossaryEntries = function (query) {
+  let filter = {};
+  if (query && query.length) {
+    // TODO: this seems awkward. I bet there's a better way
+    const queryRE = new RegExp(query, 'i');
+    filter = { $or: [{ word: queryRE }, { definition: queryRE }] };
+  }
+
+  return Glossary.find(filter).sort({ word: 'asc' }).exec();
 };
 
 const saveEntry = function (entry) {
