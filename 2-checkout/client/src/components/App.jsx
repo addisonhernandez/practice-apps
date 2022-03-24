@@ -72,7 +72,7 @@ class App extends Component {
           />
         );
       case 4:
-        return <Confirmation />;
+        return <Confirmation formData={this.state}/>;
       case 0:
       default:
         return (
