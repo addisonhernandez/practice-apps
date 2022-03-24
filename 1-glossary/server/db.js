@@ -41,11 +41,15 @@ const saveEntry = function (entry) {
     { word: entry.word }, // filter
     { word, definition }, // object to insert
     { upsert: true } // option flags
-  ).exec();
+  )
+    .exec()
+    .then(() => getGlossaryEntries());
 };
 
 const deleteEntry = function (entryId) {
-  return Glossary.deleteOne({ _id: entryId }).exec();
+  return Glossary.deleteOne({ _id: entryId })
+    .exec()
+    .then(() => getGlossaryEntries());
 };
 
 const updateEntry = function (entry) {
@@ -55,7 +59,9 @@ const updateEntry = function (entry) {
   return Glossary.findOneAndUpdate(
     { _id: entry._id }, // filter
     entry // object to insert
-  ).exec();
+  )
+    .exec()
+    .then(() => getGlossaryEntries());
 };
 
 const initialize = function () {
@@ -97,9 +103,11 @@ const initialize = function () {
         },
       },
     },
-  ]).then((res) => {
-    console.log(`Database reset.\n${res.deletedCount} documents deleted.`);
-  });
+  ])
+    .then((res) => {
+      console.log(`Database reset.\n${res.deletedCount} documents deleted.`);
+    })
+    .then(() => getGlossaryEntries());
 };
 
 // 3. Export the models

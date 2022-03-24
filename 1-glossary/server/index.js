@@ -40,7 +40,6 @@ app.post('/glossary', (req, res) => {
   }
 
   db.saveEntry(newEntry)
-    .then(() => db.getGlossaryEntries())
     .then((entries) => res.status(201).send(entries))
     .catch((err) => {
       console.log('Error while writing to the database');
@@ -61,7 +60,6 @@ app.post('/update', (req, res) => {
   }
 
   db.updateEntry(entry)
-    .then(() => db.getGlossaryEntries())
     .then((entries) => res.status(201).send(entries))
     .catch((err) => {
       console.log('Error while updating the database');
@@ -72,7 +70,6 @@ app.post('/update', (req, res) => {
 // endpoint to initialize the database
 app.get('/reset', (req, res) => {
   db.initialize()
-    .then(() => db.getGlossaryEntries())
     .then(() => res.status(200).redirect('/'))
     .catch((err) => {
       console.log('Error while resetting the database');
@@ -85,7 +82,6 @@ app.delete('/glossary', (req, res) => {
   console.log('Serving DELETE to /glossary');
 
   db.deleteEntry(req.body._id)
-    .then(() => db.getGlossaryEntries())
     .then((entries) => res.status(200).send(entries))
     .catch((err) => {
       console.log('Error while deleting from the database');
