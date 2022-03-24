@@ -5,7 +5,28 @@ class App extends Component {
     super(props);
 
     this.state = {
-
+      currentForm: 0,
+      formOneData: {
+        name: '',
+        email: '',
+        password: '', // danger, Will Robinson!
+      },
+      formTwoData: {
+        shippingAddress: {
+          lineOne: '',
+          lineTwo: '',
+          city: '',
+          state: '',
+          zipCode: '',
+        },
+        phoneNumber: '',
+      },
+      formThreeData: {
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        zipCode: '',
+      },
     };
   }
 
