@@ -24,8 +24,8 @@ const Glossary = mongoose.model('Glossary', glossarySchema);
 
 const getGlossaryEntries = function (query) {
   let filter = {};
+
   if (query && query.length) {
-    // TODO: this seems awkward. I bet there's a better way
     const queryRE = new RegExp(query, 'i');
     filter = { $or: [{ word: queryRE }, { definition: queryRE }] };
   }
@@ -41,6 +41,20 @@ const saveEntry = function (entry) {
     { word: entry.word }, // filter
     { word, definition }, // object to insert
     { upsert: true } // option flags
+  ).exec();
+};
+
+const deleteEntry = function (entryId) {
+  return Glossary.deleteOne({ _id: entryId }).exec();
+};
+
+const updateEntry = function (entry) {
+  entry.word = titleCase(entry.word);
+  entry.definition = titleCase(entry.definition);
+
+  return Glossary.findOneAndUpdate(
+    { _id: entry._id }, // filter
+    entry // object to insert
   ).exec();
 };
 
@@ -90,4 +104,10 @@ const initialize = function () {
 
 // 3. Export the models
 // 4. Import the models into any modules that need them
-module.exports = { getGlossaryEntries, saveEntry, initialize };
+module.exports = {
+  getGlossaryEntries,
+  saveEntry,
+  deleteEntry,
+  updateEntry,
+  initialize,
+};

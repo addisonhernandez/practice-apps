@@ -31,9 +31,11 @@ class App extends React.Component {
   }
 
   getEntries(term) {
-    const endpoint = (term) ?
-      `/glossary?q=${term}` :
-      '/glossary';
+    let endpoint = '/glossary';
+
+    if (term) {
+      endpoint += `?q=${term}`;
+    }
 
     this.handleFetch(endpoint, {
       headers: { 'Content-Type': 'application/json' },
@@ -48,6 +50,20 @@ class App extends React.Component {
     });
   }
 
+  editEntry(entryIndex) {
+    // TODO: something with a modal dialog
+    console.log(`Editing entry number ${entryIndex}`);
+    console.log(this.state.entries[entryIndex]);
+  }
+
+  deleteEntry(entryIndex) {
+    this.handleFetch('/glossary', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.state.entries[entryIndex]),
+    });
+  }
+
   componentDidMount() {
     this.getEntries();
   }
@@ -58,7 +74,11 @@ class App extends React.Component {
         <h1>Glossary</h1>
         <Search onSearch={this.getEntries.bind(this)} />
         <NewWordForm onSubmit={this.addNewWord.bind(this)} />
-        <WordList entries={this.state.entries} />
+        <WordList
+          entries={this.state.entries}
+          onEdit={this.editEntry.bind(this)}
+          onDelete={this.deleteEntry.bind(this)}
+        />
       </>
     );
   }

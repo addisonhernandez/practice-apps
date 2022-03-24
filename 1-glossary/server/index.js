@@ -57,6 +57,19 @@ app.get('/reset', (req, res) => {
     });
 });
 
+// route DELETE request to /glossary
+app.delete('/glossary', (req, res) => {
+  console.log('Serving DELETE to /glossary');
+
+  db.deleteEntry(req.body._id)
+    .then(() => db.getGlossaryEntries())
+    .then((entries) => res.status(200).send(entries))
+    .catch((err) => {
+      console.log('Error while deleting from the database');
+      console.error(err);
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
 console.log(`Listening at http://localhost:${PORT}`);
