@@ -32,9 +32,11 @@ app.post('/glossary', (req, res) => {
   const newEntry = req.body;
 
   if (!newEntry || !newEntry.word || !newEntry.definition) {
-    return res.status(400).send({
-      error: 'Malformed request syntax. Word and Definition are required.',
-    });
+    return res
+      .status(400)
+      .send(
+        new Error('Malformed request syntax. Word and Definition are required.')
+      );
   }
 
   db.saveEntry(newEntry)
@@ -42,6 +44,27 @@ app.post('/glossary', (req, res) => {
     .then((entries) => res.status(201).send(entries))
     .catch((err) => {
       console.log('Error while writing to the database');
+      console.error(err);
+    });
+});
+
+// route POST request to /update
+app.post('/update', (req, res) => {
+  console.log('Serving POST to /update');
+
+  const entry = req.body;
+
+  if (!entry || !entry.word || !entry.definition) {
+    return res.status(400).send({
+      error: 'Malformed request syntax. Word and Definition are required.',
+    });
+  }
+
+  db.updateEntry(entry)
+    .then(() => db.getGlossaryEntries())
+    .then((entries) => res.status(201).send(entries))
+    .catch((err) => {
+      console.log('Error while updating the database');
       console.error(err);
     });
 });
