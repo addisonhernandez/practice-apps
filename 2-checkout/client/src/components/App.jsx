@@ -67,7 +67,7 @@ class App extends Component {
         return (
           <FormThree
             submitForm={(formData) =>
-              this.handleFormThree(formData, 'formThreeData', 4)
+              this.handleFormSubmit(formData, 'formThreeData', 4)
             }
           />
         );
