@@ -13,7 +13,6 @@ class Search extends React.Component {
 
   search() {
     this.props.onSearch(this.state.filter);
-    this.setState({ filter: '' });
   }
 
   render() {
