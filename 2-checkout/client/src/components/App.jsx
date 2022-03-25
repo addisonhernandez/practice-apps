@@ -40,7 +40,13 @@ class App extends Component {
     stateChange[formName] = formData;
     stateChange.currentForm = nextFormIndex;
 
-    this.setState(stateChange);
+    this.setState(stateChange, () => {
+      fetch('/form/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.state),
+      });
+    });
   }
 
   componentDidMount() {}
@@ -72,7 +78,7 @@ class App extends Component {
           />
         );
       case 4:
-        return <Confirmation formData={this.state}/>;
+        return <Confirmation formData={this.state} />;
       case 0:
       default:
         return (
