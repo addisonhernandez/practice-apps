@@ -90,6 +90,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    ReactModal.setAppElement('body');
     this.getEntries();
   }
 
