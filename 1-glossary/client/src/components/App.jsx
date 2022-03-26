@@ -20,7 +20,7 @@ class App extends React.Component {
         return response.json();
       })
       .then((entries) => {
-        if (entries && entries.length) {
+        if (entries) {
           this.setState({ entries });
         }
       })
