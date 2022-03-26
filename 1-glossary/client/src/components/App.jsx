@@ -10,7 +10,11 @@ class App extends React.Component {
     this.state = { entries: [] };
   }
 
-  handleFetch(endpoint, options) {
+  handleFetch(endpoint, options = {}) {
+    options = {
+      headers: { 'Content-Type': 'application/json' },
+      ...options
+    },
     fetch(endpoint, options)
       .then((response) => {
         if (!response.ok) {
@@ -37,15 +41,12 @@ class App extends React.Component {
       endpoint += `?q=${term}`;
     }
 
-    this.handleFetch(endpoint, {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    this.handleFetch(endpoint);
   }
 
   addNewWord(newEntry) {
     this.handleFetch('/glossary', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newEntry),
     });
   }
@@ -59,7 +60,6 @@ class App extends React.Component {
   deleteEntry(entryIndex) {
     this.handleFetch('/glossary', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.state.entries[entryIndex]),
     });
   }
