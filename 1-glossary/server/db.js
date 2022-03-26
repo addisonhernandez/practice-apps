@@ -37,8 +37,10 @@ const saveEntry = function (entry) {
   const word = titleCase(entry.word);
   const definition = titleCase(entry.definition);
 
+  const filter = entry._id ? { _id: entry._id } : { word };
+
   return Glossary.findOneAndUpdate(
-    { word: entry.word }, // filter
+    filter,
     { word, definition }, // object to insert
     { upsert: true } // option flags
   )
